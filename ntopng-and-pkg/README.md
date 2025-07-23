@@ -10,5 +10,7 @@
     * A lancer sur un freebsd de compilation.
 2. `generate_metadata.sh` : Crée les fichiers **+MANIFEST** et **+COMPACT_MANIFEST**, prend en argument le dossier ntopng-build.
     * A lancer sur un freebsd de compilation.
-3. `install_ntopng.sh` : Effectue l'installation du package **/tmp/ntopng-6.5.250611.pkg**.
+3. `pkg create -m /tmp/ntopng-build -r /tmp/ntopng-build -o /tmp` : Commande pour générer le pkg.
+    * A lancer sur un freebsd de compilation.
+4. `install_ntopng.sh` : Effectue l'installation du package **/tmp/ntopng-6.5.250611.pkg**.
     * A lancer sur le pfsense pour installation.
