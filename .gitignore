@@ -1,0 +1,6 @@
+# Python generated files
+__pycache__/
+*.pyc
+
+# Editor generated files
+.vscode/
