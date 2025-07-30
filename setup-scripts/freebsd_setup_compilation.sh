@@ -8,8 +8,10 @@ PF_RING_VERSION="3fa234918ad7ad4698aa1b98eb6c299919660572"
 NDPI_VERSION="aba60ac354e234935f35103dfa83e5090b6e7e2a"
 NTOPNG_VERSION="a527c19bda9bb96f8db1ba82a9e0de21f4b4ef5a"
 
+export IGNORE_OSVERSION=yes
+
 # Update package database first
-pkg update -y
+pkg update
 
 # Install all dependencies in a single command to reduce build time
 pkg install -y \
@@ -23,31 +25,38 @@ pkg install -y \
 alias make=gmake
 
 # Clone and build PF_RING
-echo "Building PF_RING..."
-git clone https://github.com/ntop/PF_RING.git
-cd PF_RING/userland/libpcap
-git checkout $PF_RING_VERSION
-./configure
-make
-cd -
+if [ ! -d "PF_RING" ]; then
+    echo "Building PF_RING..."
+    git clone https://github.com/ntop/PF_RING.git
+    cd PF_RING/userland/libpcap
+    git checkout $PF_RING_VERSION
+    ./configure
+    make
+    cd -
+fi
 
 # Clone and build nDPI
-echo "Building nDPI..."
-git clone https://github.com/ntop/nDPI.git
-cd nDPI
-git checkout $NDPI_VERSION
-./autogen.sh
-./configure
-make
-cd ..
+if [ ! -d "nDPI" ]; then
+    echo "Building nDPI..."
+    git clone https://github.com/ntop/nDPI.git
+    cd nDPI
+    git checkout $NDPI_VERSION
+    ./autogen.sh
+    ./configure
+    make
+    cd -
+fi
 
 # Clone and build ntopng
-echo "Building ntopng..."
-git clone https://github.com/ntop/ntopng.git
-cd ntopng
-git checkout $NTOPNG_VERSION
-./autogen.sh
-./configure
-make
+if [ ! -d "ntopng" ]; then
+    echo "Building ntopng..."
+    git clone https://github.com/ntop/ntopng.git
+    cd ntopng
+    git checkout $NTOPNG_VERSION
+    ./autogen.sh
+    ./configure
+    make
+    cd -
+fi
 
 echo "Installation completed successfully!"
