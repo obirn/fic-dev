@@ -22,13 +22,7 @@ SHLIBS_REQUIRED='["librrd.so.8","libjson-c.so.5","libmaxminddb.so.0","libsqlite3
 
 SCRIPTS_JSON='{"post-install":"# Add missing libraries symlinks due to invalid shlib version\\nRES=`ldd /usr/local/bin/ntopng | grep \"not found\" | cut -d '\''='\'' -f 1 | sed '\''s/[[:blank:]]//g'\''`\\n\\nfor LIB in $RES; do\\n    BASELIB=`echo $LIB|cut -d '\''.'\'' -f 1`\\n    CMD=`ln -s /usr/local/lib/$BASELIB.so /usr/local/lib/$LIB`\\ndone","post-deinstall":"rm -rf /usr/local/share/ntopng"}'
 
-# Vérification des arguments
-if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 <installation-directory>"
-  exit 1
-fi
-
-INSTALL_DIR="$1"
+INSTALL_DIR="ntopng-build"
 MANIFEST_FILE="+MANIFEST"
 COMPACT_MANIFEST_FILE="+COMPACT_MANIFEST"
 

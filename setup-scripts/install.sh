@@ -60,5 +60,23 @@ scp -r ntopng/ntopng-changes/* root@$FREEBSD_HOSTNAME:ntopng/
 log_success "Copied ntopng changes to ntopng-infected directory."
 
 # Step : Compile ntopng on the FreeBSD host
-log_info "Compiling ntopng on the FreeBSD host..."
-ssh root@$FREEBSD_HOSTNAME 'sh -s' < setup-scripts/freebsd_compile_ntopng.sh
+# log_info "Compiling ntopng on the FreeBSD host..."
+# ssh root@$FREEBSD_HOSTNAME 'sh -s' < setup-scripts/freebsd_compile_ntopng.sh
+
+log_info "Set ntopng build directory"
+ssh root@$FREEBSD_HOSTNAME 'sh -s' < setup-scripts/freebsd_setup_ntopng_build.sh
+
+log_info "Set ntopng build directory"
+ssh root@$FREEBSD_HOSTNAME 'sh -s' < setup-scripts/generate_metadata.sh
+
+log_info "Create the ntopng package"
+ssh root@$FREEBSD_HOSTNAME 'pkg create -m /tmp/ntopng-build -r /tmp/ntopng-build -o /tmp'
+
+log_info "Copy the ntopng package locally"
+scp root@$FREEBSD_HOSTNAME:/tmp/ntopng-6.5.250611.pkg /tmp/ntopng-6.5.250611.pkg
+
+log_info "Copy the ntopng package to the Pfsense host" 
+scp /tmp/ntopng-6.5.250611.pkg root@$PFSENSE_HOSTNAME:/tmp/ntopng-6.5.250611.pkg
+
+log_info "Run the ntopng installation script on the Pfsense host"
+ssh root@$PFSENSE_HOSTNAME 'sh -s' < setup-scripts/install_ntopng.sh
